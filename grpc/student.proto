@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+option go_package = "grpc/student";
+package student;
+
+import "google/protobuf/any.proto";
+
+service StudentService {
+    rpc StudentOp(stream Event) returns (stream Ack);
+    rpc SendHeartBeat(HeartBeat) returns (Ack);
+}
+
+message Ack {
+    google.protobuf.Any ack = 2;
+}
+
+message Event {
+    string clientId = 1;
+    google.protobuf.Any event= 2;
+}
+
+message RegistryEvent {
+    string clientId = 1;
+}
+
+message AddStudentEvent{
+    Student Student = 2;
+}
+
+message GetStudentEvent{
+    int64
+    studentId = 1;
+}
+
+message AddStudentExamResult {
+    Student Student = 1;
+    repeated Grade grade = 2;
+}
+
+message Student {
+    string name = 1;
+    int64 id = 2;
+    enum SexType {
+        MAN = 0;
+        WOMEN = 1;
+    }
+    SexType sex = 3;
+}
+
+message Course {
+    string name = 1;
+    int64 id = 2;
+}
+
+message Grade {
+    enum GradeType {
+        QUIZ = 0;
+        MIDDLE = 1;
+        EXAM = 2;
+    }
+    GradeType type= 1;
+    Course course = 2;
+    int32 score =3;
+}
+
+
+message HeartBeat {
+    string clientId = 1;
+}
